@@ -24,34 +24,47 @@
         </div>
         <div class="form__main">
           <div class="form__field">
-            <label for="quantity">Qty</label>
-            <input
-              id="quantity"
-              name="quantity"
-              type="number"
-              min="0"
-              max="10"
-              required
-            />
+            <div class="container__field">
+              <input
+                id="quantity"
+                name="quantity"
+                type="number"
+                min="0"
+                max="10"
+                class="container__input"
+                placeholder="Qty"
+                required
+              />
+              <label for="quantity" class="container__label">Qty</label>
+            </div>
           </div>
           <div class="form__field">
-            <label for="description">Description</label>
-            <input id="description" name="description" type="text" required />
+            <div class="container__field">
+              <input id="description" name="description" type="text" placeholder="Description" class="container__input" required />
+              <label for="description" class="container__label">Description</label>
+            </div>
           </div>
           <div class="form__field">
-            <label for="price">Price</label>
-            <input
-              id="price"
-              name="price"
-              type="number"
-              min="0"
-              step="0.01"
-              required
-            />
+            <div class="container__field">
+              <input
+                id="price"
+                name="price"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Price"
+                class="container__input"
+                required
+              />
+              <label for="price" class="container__label">Price</label>
+            </div>
           </div>
           <div class="form__field">
-            <label for="taxed">Taxed</label>
-            <input id="taxed" name="taxed" type="checkbox" />
+            <label class="switch">
+              <input id="taxed" name="taxed" type="checkbox">
+              <span class="slider round"></span>
+            </label>
+            <label>Taxed</label>
           </div>
         </div>
       </div>
@@ -130,7 +143,6 @@
   }
   .form__field label {
     display: block;
-    margin-bottom: 0.5em;
   }
   .form__field input,
   select {
@@ -183,4 +195,82 @@
     margin-right: 0.9em;
     padding: 2px;
   }
+  .container__input:not(:placeholder-shown) + .container__label {
+    background: #FFF;
+    transform: translate(0, -50%);
+    opacity: 1;
+  }
+
+  .container__label {
+    left: 8px;
+    position: absolute;
+    top: 0;
+    font-size: 12px;
+
+    opacity: 0;
+    transition: all 200ms;
+  }
+
+  .container__field {
+    position: relative
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  } 
 </style>
