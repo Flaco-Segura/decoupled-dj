@@ -15,7 +15,8 @@ INSTALLED_APPS = [
   "django.contrib.messages",
   "django.contrib.staticfiles",
   "users.apps.UserConfig",
-  "billing.apps.BillingConfig"
+  "billing.apps.BillingConfig",
+  "rest_framework", # enables DRF
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
