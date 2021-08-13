@@ -19,3 +19,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
   class Meta:
     model = Invoice
     fields = ["user", "date", "due_date", "items"]
+
+  def create(self, validated_data):
+    items = validated_data.pop("items")
+    invoice = Invoice.objects.create(**validated_data)
+    for item in items:
+      ItemLine.objects.create(invoice=invoice, **item)
+    return invoice
