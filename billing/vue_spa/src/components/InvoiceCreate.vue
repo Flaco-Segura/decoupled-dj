@@ -23,50 +23,12 @@
           </div>
         </div>
         <div class="form__main">
-          <div class="form__field">
-            <div class="container__field">
-              <input
-                id="quantity"
-                name="quantity"
-                type="number"
-                min="0"
-                max="10"
-                class="container__input"
-                placeholder="Qty"
-                required
-              />
-              <label for="quantity" class="container__label">Qty</label>
-            </div>
-          </div>
-          <div class="form__field">
-            <div class="container__field">
-              <input id="description" name="description" type="text" placeholder="Description" class="container__input" required />
-              <label for="description" class="container__label">Description</label>
-            </div>
-          </div>
-          <div class="form__field">
-            <div class="container__field">
-              <input
-                id="price"
-                name="price"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="Price"
-                class="container__input"
-                required
-              />
-              <label for="price" class="container__label">Price</label>
-            </div>
-          </div>
-          <div class="form__field">
-            <label class="switch">
-              <input id="taxed" name="taxed" type="checkbox">
-              <span class="slider round"></span>
-            </label>
-            <label>Taxed</label>
-          </div>
+          <template v-for="(child, index) in children">
+            <component :is="child" :key="index"></component>
+          </template>
         </div>
+        
+        <button @click="add()" class="button__bottom">Add Another</button>
       </div>
       <div class="form__buttons">
         <button type="submit">Create invoice</button>
@@ -77,6 +39,8 @@
 </template>
 
 <script>
+  import Item from "@/components/Item.vue"
+
   export default {
     name: "InvoiceCreate",
     data: function() {
@@ -84,6 +48,9 @@
         users: [
           { id: 1, name: "xadrg", email: "xadrg@acme.io" },
           { id: 2, name: "olcmf", email: "olcmf@xyz.dev" }
+        ],
+        children: [
+          Item
         ]
       }
     },
@@ -120,6 +87,9 @@
           }).then(json => {
             this.users = json;
           })
+      },
+      add() {
+        this.children.push(Item);
       }
     }
   };
@@ -199,6 +169,7 @@
     width: 150px;
     height: 40px;
     margin-right: 0.9em;
+    margin-top: 0.9em;
     padding: 2px;
   }
   .container__input:not(:placeholder-shown) + .container__label {
@@ -278,5 +249,15 @@
 
   .slider.round:before {
     border-radius: 50%;
-  } 
+  }
+
+  .item__field {
+    display: flex;
+  }
+
+  .button__bottom {
+    width: 100%;
+    height: auto;
+    opacity: 0.6;
+  }
 </style>
