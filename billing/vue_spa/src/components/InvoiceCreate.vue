@@ -24,7 +24,7 @@
         </div>
         <div class="form__main">
           <template v-for="(child, index) in children">
-            <component :is="child" :key="index"></component>
+            <component :is="child" :key="index" ref="item"></component>
           </template>
         </div>
         
@@ -59,14 +59,18 @@
         const formData = new FormData(event.target);
 
         const data = Object.fromEntries(formData);
-        data.items = [
-          {
-            quantity: formData.get("quantity"),
-            description: formData.get("description"),
-            price: formData.get("price"),
-            taxed: Boolean(formData.get("taxed"))
-          }
-        ];
+        data.items = []
+        const items = this.$refs.item
+        items.forEach(item =>
+          data.items.push(
+            {
+              quantity: item.$refs.quantity.value,
+              description: item.$refs.description.value,
+              price: item.$refs.price.value,
+              taxed: Boolean(item.$refs.taxed.value)
+            }
+          )
+        )
 
         fetch("/billing/api/invoices/", {
           method: "POST",
@@ -132,14 +136,8 @@
   .form__field input[type="date"] {
     font-size: 0.6em;
   }
-  .form__field select {
-  }
-  .form__field input {
-  }
   #quantity {
     width: 30px;
-  }
-  #description {
   }
   .form__aside {
     display: flex;
