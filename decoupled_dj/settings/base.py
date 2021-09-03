@@ -17,6 +17,7 @@ INSTALLED_APPS = [
   "users.apps.UserConfig",
   "billing.apps.BillingConfig",
   "rest_framework", # enables DRF
+  "corsheaders", # enables django-cors-headers
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -26,6 +27,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 ROOT_URLCONF = "decoupled_dj.urls"
 TEMPLATES = [
