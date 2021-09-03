@@ -72,9 +72,14 @@
           )
         )
 
+        const csrfToken = this.$cookies.get("csrfToken");
+
         fetch("/billing/api/invoices/", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "CSRFToken": csrfToken
+          },
           body: JSON.stringify(data)
         }).then(response => {
           if (!response.ok) throw Error(response.statusText);
