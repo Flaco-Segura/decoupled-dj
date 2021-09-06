@@ -6,6 +6,7 @@ server {
   server_name {{ domain }};
 
   location / {
+    alias /home/{{ user }}/code/static/;
     proxy_pass http://gunicorn;
     proxy_set_header Host $host;
     proxy_set_header X-Real_IP $remote_addr;
