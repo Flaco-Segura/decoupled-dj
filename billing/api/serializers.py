@@ -1,4 +1,3 @@
-from django.db.models import fields
 from users.models import User
 from billing.models import Invoice, ItemLine
 from rest_framework import serializers
