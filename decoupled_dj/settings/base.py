@@ -16,6 +16,7 @@ INSTALLED_APPS = [
   "django.contrib.staticfiles",
   "users.apps.UserConfig",
   "billing.apps.BillingConfig",
+  "blog.apps.BlogConfig",
   "rest_framework", # enables DRF
   "corsheaders", # enables django-cors-headers
 ]
