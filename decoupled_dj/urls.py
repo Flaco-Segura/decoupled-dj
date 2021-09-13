@@ -22,6 +22,10 @@ urlpatterns = [
     'billing/',
     include("billing.urls", namespace="billing")
   ),
+  path(
+    'blog/',
+    include("blog.urls", namespace="blog")
+  )
 ]
 
 if settings.DEBUG:
