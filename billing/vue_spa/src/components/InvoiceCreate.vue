@@ -88,18 +88,18 @@
           console.log(json);
         }).catch(err => console.log(err));
       },
-      mounted() {
-        fetch("/billing/api/clients")
-          .then(response => {
-            if (!response.ok) throw Error(response.statusText);
-            return response.json();   
-          }).then(json => {
-            this.users = json;
-          })
-      },
       add() {
         this.children.push(Item);
       }
+    },
+    mounted() {
+      fetch("/billing/api/clients/")
+        .then(response => {
+          if (!response.ok) throw Error(response.statusText);
+          return response.json();
+        }).then(json => {
+          this.users = json;
+        })
     }
   };
 </script>
