@@ -19,6 +19,7 @@ INSTALLED_APPS = [
   "blog.apps.BlogConfig",
   "rest_framework", # enables DRF
   "corsheaders", # enables django-cors-headers
+  "login"
 ]
 MIDDLEWARE = [
   "django.middleware.security.SecurityMiddleware",
@@ -79,3 +80,4 @@ REST_FRAMEWORK = {
     "rest_framework.permissions.IsAdminUser"
   ],
 }
+LOGIN_REDIRECT_URL = "/"

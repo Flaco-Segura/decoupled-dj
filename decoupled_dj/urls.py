@@ -25,7 +25,8 @@ urlpatterns = [
   path(
     'blog/',
     include("blog.urls", namespace="blog")
-  )
+  ),
+  path("auth/", include("login.urls", namespace="auth")),
 ]
 
 if settings.DEBUG:
