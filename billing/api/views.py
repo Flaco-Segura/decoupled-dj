@@ -1,7 +1,10 @@
 from .serializers import InvoiceSerializer, UserSerializer, User
 from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated
 
 class ClientList(ListAPIView):
+  permission_classes = [IsAuthenticated]
+
   serializer_class = UserSerializer
   queryset = User.objects.all()
 
