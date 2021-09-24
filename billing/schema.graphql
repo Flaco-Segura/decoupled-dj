@@ -6,21 +6,21 @@ enum InvoiceState {
 
 type User {
   id: ID
-  name: string
-  email: string
+  name: String
+  email: String
 }
 
 type Invoice {
   user: User
-  date: string
-  dueDate: string
+  date: String
+  dueDate: String
   state: InvoiceState
   items: [ItemLine]
 }
 
 type ItemLine {
   quantity: Int
-  description: string
+  description: String
   price: Float
   taxed: Boolean
 }
