@@ -1,0 +1,30 @@
+enum InvoiceState {
+  PAID
+  UNPAID
+  CANCELLED
+}
+
+type User {
+  id: ID
+  name: string
+  email: string
+}
+
+type Invoice {
+  user: User
+  date: string
+  dueDate: string
+  state: InvoiceState
+  items: [ItemLine]
+}
+
+type ItemLine {
+  quantity: Int
+  description: string
+  price: Float
+  taxed: Boolean
+}
+
+type Query {
+  getClients: [User]
+}
