@@ -19,7 +19,8 @@ INSTALLED_APPS = [
   "blog.apps.BlogConfig",
   "rest_framework", # enables DRF
   "corsheaders", # enables django-cors-headers
-  "login"
+  "login",
+  "ariadne.contrib.django", # enables ariadne
 ]
 MIDDLEWARE = [
   "django.middleware.security.SecurityMiddleware",
