@@ -27,4 +27,5 @@ type ItemLine {
 
 type Query {
   getClients: [User]
+  getClient(id: ID!): User
 }

@@ -13,4 +13,8 @@ query = ObjectType("Query")
 def resolve_clients(obj, info):
   return User.objects.all()
 
+@query.field("getClient")
+def resolve_client(obj, info, id):
+  return User.objects.get(id=id)
+
 schema = make_executable_schema(type_defs, query)
