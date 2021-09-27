@@ -29,3 +29,22 @@ type Query {
   getClients: [User]
   getClient(id: ID!): User
 }
+
+input ItemLineInput {
+  quantity: Int!
+  description: String!
+  price: Float!
+  taxed: Boolean!
+}
+
+input InvoiceInput {
+  user: ID!
+  date: String!
+  dueDate: String!
+  state: InvoiceState
+  items: [ItemLineInput!]!
+}
+
+type Mutation {
+ invoiceCreate(invoice: IvoiceInput!): Invoice!
+}
