@@ -1,6 +1,8 @@
-from ariadne import load_schema_from_path, gql, make_executable_schema, ObjectType
+from ariadne import load_schema_from_path, gql, make_executable_schema, ObjectType, MutationType
+from ariadne.utils import convert_kwargs_to_snake_case
 from pathlib import Path
 from users.models import User
+from billing.models import Invoice, ItemLine
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -17,4 +19,17 @@ def resolve_clients(obj, info):
 def resolve_client(obj, info, id):
   return User.objects.get(id=id)
 
-schema = make_executable_schema(type_defs, query)
+mutation = MutationType()
+
+@mutation.field("invoiceCreate")
+@convert_kwargs_to_snake_case
+def resolve_invoice_create(obj, info, invoice):
+  user_id = invoice.pop("user")
+  items = invoice.pop("items")
+
+  invoice = Invoice.objects.create(user_id=user_id, **invoice)
+  for item in items:
+    ItemLine.objects.create(invoice=invoice, **item)
+  return invoice
+
+schema = make_executable_schema(type_defs, query, mutation)
