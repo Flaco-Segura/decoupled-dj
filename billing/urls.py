@@ -20,5 +20,5 @@ urlpatterns = [
     InvoiceCreate.as_view(),
     name="invoice-create"
   ),
-  path("graphql/", GraphQLView.as_view(schema=schema), name=graphql),
+  path("graphql/", GraphQLView.as_view(schema=schema), name="graphql"),
 ]
