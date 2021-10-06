@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
-import {
-  ApolloClient,
-  InMemoryCache,
-  gql,
-} from "@apollo/client";
+import React from "react";
+import { gql, useQuery } from "@apollo/client";
 import Form from "./Form";
 import Select from "./Select";
 
-const client = new ApolloClient({
-  uri: "http://127.0.0.1:8000/billing/graphql",
-  cache: new InMemoryCache(),
-});
+const GET_CLIENTS = gql`
+query getClients {
+  getClients {
+    id
+    email
+  }
+}
+`;
 
 const App = () => {
-  const [options, setOptions] = useState([
-    {id: "", email: ""},
-  ]);
+  const { loading, data } = useQuery(GET_CLIENTS);
 
   const handleSubmit = (
     event: React.FormEvent<HTMLFormElement>
@@ -24,33 +22,17 @@ const App = () => {
     // client.mutate()
   };
 
-  const GET_CLIENTS = gql`
-    query getClients {
-      getClients {
-        id
-        email
-      }
-    }
-  `;
-
-  useEffect(() =>{
-    client
-      .query({
-        query: GET_CLIENTS,
-      })
-      .then(queryResult => {
-        setOptions(queryResult.data.getClients);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
-  return (
+  return loading ? (
+    <p>Loading ...</p>
+  ) : (
     <Form handleSubmit={handleSubmit}>
-      <Select id="user" name="user" options={options} />
+      <Select
+        id="user"
+        name="user"
+        options={data.getClients}
+      />
     </Form>
-  );
+  )
 };
 
 export default App;
