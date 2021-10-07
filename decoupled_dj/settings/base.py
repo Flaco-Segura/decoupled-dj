@@ -21,6 +21,7 @@ INSTALLED_APPS = [
   "corsheaders", # enables django-cors-headers
   "login",
   "ariadne.contrib.django", # enables ariadne
+  "strawberry.django", #enables strawberry
 ]
 MIDDLEWARE = [
   "django.middleware.security.SecurityMiddleware",
