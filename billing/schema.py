@@ -1,35 +1,33 @@
-from ariadne import load_schema_from_path, gql, make_executable_schema, ObjectType, MutationType
-from ariadne.utils import convert_kwargs_to_snake_case
-from pathlib import Path
-from users.models import User
-from billing.models import Invoice, ItemLine
+from enum import Enum
+import strawberry
+import datetime
+import decimal
 
-BASE_DIR = Path(__file__).resolve().parent
+from typing import List
 
-schema_file = load_schema_from_path(BASE_DIR / "schema.graphql")
-type_defs = gql(schema_file)
+@strawberry.enum
+class InvoiceState(Enum):
+  PAID = "PAID"
+  UNPAID = "UNPAID"
+  CANCELLED = "CANCELLED"
 
-query = ObjectType("Query")
+@strawberry.type
+class User:
+  id: strawberry.ID
+  name: str
+  email: str
 
-@query.field("getClients")
-def resolve_clients(obj, info):
-  return User.objects.all()
+@strawberry.type
+class Invoice:
+  user: User
+  date: datetime.date
+  due_date: datetime.date
+  state: InvoiceState
+  items: List["ItemLine"]
 
-@query.field("getClient")
-def resolve_client(obj, info, id):
-  return User.objects.get(id=id)
-
-mutation = MutationType()
-
-@mutation.field("invoiceCreate")
-@convert_kwargs_to_snake_case
-def resolve_invoice_create(obj, info, invoice):
-  user_id = invoice.pop("user")
-  items = invoice.pop("items")
-
-  invoice = Invoice.objects.create(user_id=user_id, **invoice)
-  for item in items:
-    ItemLine.objects.create(invoice=invoice, **item)
-  return invoice
-
-schema = make_executable_schema(type_defs, query, mutation)
+@strawberry.type
+class ItemLine:
+  quantity: int
+  description: str
+  price: decimal.Decimal
+  taxed: bool
