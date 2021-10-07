@@ -4,6 +4,7 @@ import datetime
 import decimal
 
 from typing import List
+from users.models import User as UserModel
 
 @strawberry.enum
 class InvoiceState(Enum):
@@ -31,3 +32,9 @@ class ItemLine:
   description: str
   price: decimal.Decimal
   taxed: bool
+
+def resolve_clients():
+  return UserModel.objects.all()
+
+def resolve_client(id: strawberry.ID):
+  return UserModel.objects.get(id=id)
