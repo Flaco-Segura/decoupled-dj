@@ -3,7 +3,8 @@ from django.urls import path
 import graphql
 from .views import Index
 from .api.views import ClientList, InvoiceCreate
-from ariadne.contrib.django.views import GraphQLView
+# from ariadne.contrib.django.views import GraphQLView
+from strawberry.django.views import AsyncGraphQLView
 from .schema import schema
 
 app_name = "billing"
@@ -20,5 +21,5 @@ urlpatterns = [
     InvoiceCreate.as_view(),
     name="invoice-create"
   ),
-  path("graphql/", GraphQLView.as_view(schema=schema), name="graphql"),
+  path("graphql/", AsyncGraphQLView.as_view(schema=schema), name="graphql"),
 ]

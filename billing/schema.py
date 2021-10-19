@@ -4,6 +4,8 @@ import datetime
 import decimal
 
 from typing import List
+
+from strawberry import schema
 from users.models import User as UserModel
 
 @strawberry.enum
@@ -38,3 +40,9 @@ def resolve_clients():
 
 def resolve_client(id: strawberry.ID):
   return UserModel.objects.get(id=id)
+
+@strawberry.type
+class Query:
+  get_clients: List[User] = strawberry.field(resolver=resolve_clients)
+  get_client: User = strawberry.field(resolver=resolve_client)
+schema = strawberry.Schema(query=Query)
