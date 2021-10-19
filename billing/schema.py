@@ -2,11 +2,15 @@ from enum import Enum
 import strawberry
 import datetime
 import decimal
+import dataclasses
 
 from typing import List
 
 from strawberry import schema
+from strawberry import mutation
 from users.models import User as UserModel
+from billing.models import Invoice as InvoiceModel
+from billing.models import ItemLine as ItemLineModel
 
 @strawberry.enum
 class InvoiceState(Enum):
@@ -45,4 +49,36 @@ def resolve_client(id: strawberry.ID):
 class Query:
   get_clients: List[User] = strawberry.field(resolver=resolve_clients)
   get_client: User = strawberry.field(resolver=resolve_client)
-schema = strawberry.Schema(query=Query)
+
+@strawberry.input
+class ItemLineInput:
+  quantity: int
+  description: str
+  price: decimal.Decimal
+  taxed: bool
+
+@strawberry.input
+class InvoiceInput:
+  user: strawberry.ID
+  date: datetime.date
+  due_date: datetime.date
+  state: InvoiceState
+  items: List[ItemLineInput]
+
+@strawberry.type
+class Mutation:
+  @strawberry.mutation
+  def create_invoice(self, invoice: InvoiceInput) -> Invoice:
+    _invoice = dataclasses.asdict(invoice)
+    user_id = _invoice.pop("user")
+    items = _invoice.pop("items")
+    state = _invoice.pop("state")
+
+    new_invoice = InvoiceModel.objects.create(
+      user_id=user_id, state=state.value, **_invoice
+    )
+    for item in items:
+      ItemLineModel.objects.create(invoice=_invoice, **item)
+    return new_invoice
+
+schema = strawberry.Schema(query=Query, mutation=Mutation)
