@@ -8,6 +8,7 @@ from typing import List
 
 from strawberry import schema
 from strawberry import mutation
+from asgiref.sync import sync_to_async
 from users.models import User as UserModel
 from billing.models import Invoice as InvoiceModel
 from billing.models import ItemLine as ItemLineModel
@@ -65,20 +66,36 @@ class InvoiceInput:
   state: InvoiceState
   items: List[ItemLineInput]
 
+def _create_invoice(user_id, state, invoice):
+  return InvoiceModel.objects.create(user_id=user_id, state=state.value, **invoice)
+
+def _create_itemlines(invoice, item):
+  return ItemLineModel.objects.create(invoice=invoice, **item)
+
 @strawberry.type
 class Mutation:
   @strawberry.mutation
-  def create_invoice(self, invoice: InvoiceInput) -> Invoice:
+  async def create_invoice(self, invoice: InvoiceInput) -> Invoice:
     _invoice = dataclasses.asdict(invoice)
     user_id = _invoice.pop("user")
     items = _invoice.pop("items")
     state = _invoice.pop("state")
 
-    new_invoice = InvoiceModel.objects.create(
-      user_id=user_id, state=state.value, **_invoice
-    )
+    new_invoice = await sync_to_async(_create_invoice)(user_id, state, _invoice)
     for item in items:
-      ItemLineModel.objects.create(invoice=_invoice, **item)
+      await sync_to_async(_create_itemlines)(_invoice, item)
     return new_invoice
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
+
+def _get_all_clients():
+  return list(UserModel.objects.all())
+
+async def resolve_clients():
+  return await sync_to_async(_get_all_clients)()
+
+def _get_client(id):
+  return UserModel.objects.get(id=id)
+
+async def resolve_client():
+  return await sync_to_async(_get_client)(id)
